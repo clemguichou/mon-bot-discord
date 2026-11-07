@@ -191,8 +191,11 @@ class DiscordBot(commands.Bot):
             f"Running on: {platform.system()} {platform.release()} ({os.name})"
         )
         self.logger.info("-------------------")
+
         await self.init_db()
         await self.load_cogs()
+        await self.tree.sync()
+
         self.status_task.start()
         self.database = DatabaseManager(
             connection=await aiosqlite.connect(
@@ -203,6 +206,7 @@ class DiscordBot(commands.Bot):
     async def on_message(self, message: discord.Message) -> None:
         """
         The code in this event is executed every time someone sends a message, with or without the prefix
+        """
 
         :param message: The message that was sent.
         """
